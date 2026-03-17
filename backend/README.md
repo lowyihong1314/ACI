@@ -10,9 +10,6 @@
 
 Current connection is defined in [`backend/.env`](/home/utba/flaskapp/ACI/backend/.env):
 
-```env
-DATABASE_URL=mysql+pymysql://yukang:Lowyihong123@127.0.0.1:3306/aci_db?charset=utf8mb4
-```
 
 If MariaDB is on another host or port, update `DATABASE_URL` in `.env`.
 

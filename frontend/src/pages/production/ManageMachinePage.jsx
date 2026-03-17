@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { getManageMachines, getPlants, saveManageMachine } from '../../api/production'
+import { deleteMachine, getManageMachines, getPlants, saveManageMachine } from '../../api/production'
 
 const defaultForm = {
   id: null,
@@ -72,6 +72,21 @@ export default function ManageMachinePage() {
     }
   }
 
+  const removeMachine = async (machineId) => {
+    setMessage('')
+    setError('')
+    try {
+      const response = await deleteMachine(machineId)
+      setMessage(response.message || 'Machine deleted')
+      if (form.id === machineId) {
+        setForm(defaultForm)
+      }
+      await loadData()
+    } catch (requestError) {
+      setError(requestError.message || 'Unable to delete machine.')
+    }
+  }
+
   return (
     <section className="module-card">
       <div className="module-header">
@@ -137,6 +152,9 @@ export default function ManageMachinePage() {
               <button className="submit-button" type="submit">
                 {form.id ? 'Update Machine' : 'Create Machine'}
               </button>
+              <button className="mini-button ghost-button" type="button" onClick={() => setForm(defaultForm)}>
+                Reset
+              </button>
             </form>
           </section>
 
@@ -164,7 +182,7 @@ export default function ManageMachinePage() {
                       <td>{item.machine_group || '-'}</td>
                       <td>{item.display_order}</td>
                       <td>{item.is_active ? 'Active' : 'Inactive'}</td>
-                      <td>
+                      <td className="action-cell">
                         <button
                           className="mini-button"
                           type="button"
@@ -185,6 +203,13 @@ export default function ManageMachinePage() {
                           }
                         >
                           Edit
+                        </button>
+                        <button
+                          className="mini-button ghost-button"
+                          type="button"
+                          onClick={() => removeMachine(item.id)}
+                        >
+                          Delete
                         </button>
                       </td>
                     </tr>

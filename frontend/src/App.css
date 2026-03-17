@@ -374,6 +374,11 @@
   min-width: 180px;
 }
 
+.search-field {
+  min-width: min(360px, 100%);
+  flex: 1 1 320px;
+}
+
 .table-scroll {
   overflow-x: auto;
 }
@@ -424,6 +429,29 @@
   margin-left: 8px;
   background: rgba(255, 255, 255, 0.78);
   color: #14202b;
+}
+
+.pagination-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pagination-summary {
+  margin: 0;
+}
+
+.pagination-status {
+  color: #475467;
+  font-weight: 600;
+}
+
+.empty-cell {
+  text-align: center;
+  color: #475467;
+  padding: 24px 10px;
 }
 
 .summary-card-grid {

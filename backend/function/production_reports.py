@@ -2,9 +2,11 @@ from flask import Blueprint, jsonify, request
 
 from backend.function.common.decorators import login_required
 from backend.services.production_service import (
+    build_daily_plan_vs_actual,
     build_monthly_machine_summary,
     build_monthly_plant_summary,
     build_ytd_summary,
+    parse_iso_date,
     parse_year_month,
 )
 
@@ -39,3 +41,21 @@ def ytd_summary(current_user):
     if year <= 0 or month <= 0:
         return jsonify({"message": "year and month are required"}), 400
     return jsonify({"item": build_ytd_summary(year, month)})
+
+
+@production_reports_bp.get("/reports/daily-plan-vs-actual")
+@login_required
+def daily_plan_vs_actual(current_user):
+    try:
+        end_date = parse_iso_date(request.args.get("end_date"))
+    except ValueError as exc:
+        return jsonify({"message": str(exc)}), 400
+
+    days = int(request.args.get("days") or 7)
+    if days <= 0 or days > 31:
+        return jsonify({"message": "days must be between 1 and 31"}), 400
+    machine_id = request.args.get("machine_id", type=int)
+    if machine_id is not None and machine_id <= 0:
+        return jsonify({"message": "machine_id must be a positive integer"}), 400
+
+    return jsonify({"items": build_daily_plan_vs_actual(end_date, days, machine_id)})

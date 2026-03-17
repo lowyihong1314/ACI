@@ -28,6 +28,19 @@ export function getPlants() {
   return requestJson('/api/plants')
 }
 
+export function savePlant(payload, plantId) {
+  return requestJson(plantId ? `/api/plants/${plantId}` : '/api/plants', {
+    method: plantId ? 'PUT' : 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export function deletePlant(plantId) {
+  return requestJson(`/api/plants/${plantId}`, {
+    method: 'DELETE',
+  })
+}
+
 export function getMachines() {
   return requestJson('/api/machines')
 }
@@ -47,10 +60,22 @@ export function saveProduct(payload, productId) {
   })
 }
 
+export function deleteProduct(productId) {
+  return requestJson(`/api/products/${productId}`, {
+    method: 'DELETE',
+  })
+}
+
 export function saveMachine(payload, machineId) {
   return requestJson(machineId ? `/api/machines/${machineId}` : '/api/machines', {
     method: machineId ? 'PUT' : 'POST',
     body: JSON.stringify(payload),
+  })
+}
+
+export function deleteMachine(machineId) {
+  return requestJson(`/api/machines/${machineId}`, {
+    method: 'DELETE',
   })
 }
 
@@ -72,19 +97,12 @@ export function saveBreakdownReason(payload, reasonId) {
   })
 }
 
-export function getAnnualTargets(year) {
-  return requestJson(`/api/annual-targets?year=${year}`)
-}
-
-export function saveAnnualTarget(payload, targetId) {
-  return requestJson(targetId ? `/api/annual-targets/${targetId}` : '/api/annual-targets', {
-    method: targetId ? 'PUT' : 'POST',
-    body: JSON.stringify(payload),
-  })
-}
-
 export function getDailyProduction(date) {
   return requestJson(`/api/daily-production?date=${date}`)
+}
+
+export function getDailyProductionByMonth(month) {
+  return requestJson(`/api/daily-production?month=${month}`)
 }
 
 export function saveDailyProduction(payload, recordId) {
@@ -150,12 +168,7 @@ export function getYtdSummary(year, month) {
   return requestJson(`/api/reports/ytd-summary?year=${year}&month=${month}`)
 }
 
-export function getRawDataSummary() {
-  return requestJson('/api/raw-data/summary')
-}
-
-export function triggerRawDataImport() {
-  return requestJson('/api/raw-data/import', {
-    method: 'POST',
-  })
+export function getDailyPlanVsActual(endDate, days = 7, machineId = '') {
+  const machineQuery = machineId ? `&machine_id=${machineId}` : ''
+  return requestJson(`/api/reports/daily-plan-vs-actual?end_date=${endDate}&days=${days}${machineQuery}`)
 }

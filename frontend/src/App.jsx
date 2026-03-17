@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import DailyBreakdownPage from './pages/production/DailyBreakdownPage'
 import DailyProductionPage from './pages/production/DailyProductionPage'
-import AnnualTargetPage from './pages/production/AnnualTargetPage'
+import DailyTrendPage from './pages/production/DailyTrendPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import ManageMachinePage from './pages/production/ManageMachinePage'
 import MasterDataPage from './pages/production/MasterDataPage'
 import MonthlySummaryPage from './pages/production/MonthlySummaryPage'
+import PlantManagementPage from './pages/production/PlantManagementPage'
 import './App.css'
 
 const TOKEN_STORAGE_KEY = 'aci-access-token'
@@ -18,12 +19,13 @@ const navItems = [
 ]
 
 const productionTabs = [
+  { id: 'plant-management', label: 'Plants' },
+  { id: 'daily-trend', label: '7-Day Chart' },
   { id: 'daily-production', label: 'Daily Product Output' },
   { id: 'daily-breakdown', label: 'Daily Machine Plan' },
   { id: 'monthly-summary', label: 'Monthly Summary' },
   { id: 'manage-machine', label: 'Manage Machine' },
   { id: 'master-data', label: 'Products' },
-  { id: 'annual-targets', label: 'Raw Data Import' },
 ]
 
 function App() {
@@ -440,13 +442,13 @@ function App() {
           </section>
         ) : activeItem === 'production-admin' ? (
           <section className="content-card production-module-shell">
-            <div className="card-heading">
+            {/* <div className="card-heading">
               <p className="content-label">Raw Data Workflow</p>
               <h2>Workbook-Driven Production Module</h2>
               <p className="card-description">
                 The 3 Excel workbooks are the source of truth for products, machine plans, monthly output and efficiency reporting.
               </p>
-            </div>
+            </div> */}
 
             <div className="subnav">
               {productionTabs.map((tab) => (
@@ -461,12 +463,13 @@ function App() {
               ))}
             </div>
 
+            {activeProductionTab === 'plant-management' ? <PlantManagementPage /> : null}
+            {activeProductionTab === 'daily-trend' ? <DailyTrendPage /> : null}
             {activeProductionTab === 'daily-production' ? <DailyProductionPage /> : null}
             {activeProductionTab === 'daily-breakdown' ? <DailyBreakdownPage /> : null}
             {activeProductionTab === 'monthly-summary' ? <MonthlySummaryPage /> : null}
             {activeProductionTab === 'manage-machine' ? <ManageMachinePage /> : null}
             {activeProductionTab === 'master-data' ? <MasterDataPage /> : null}
-            {activeProductionTab === 'annual-targets' ? <AnnualTargetPage /> : null}
           </section>
         ) : (
           <DashboardPage />
